@@ -5,6 +5,7 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -20,14 +21,32 @@ public class DominoSpringbootApplication {
 		System.out.println("서블릿 컨테이너 띄우기 실습 시작 ");
 		TomcatServletWebServerFactory serverfactory = new TomcatServletWebServerFactory();
 		WebServer webServer = serverfactory.getWebServer(servletContext -> {
-			servletContext.addServlet("hello", new HttpServlet() {
+			// servletContext.addServlet("hello", new HttpServlet() {
+			servletContext.addServlet("frontController", new HttpServlet() {
 				@Override
 				protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-					resp.setStatus(HttpStatus.OK.value());
-					resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE); // <-- 하드코딩 하지 말고 스프링 안에 정의되어 있는 상수 사용 권유
-					resp.getWriter().println("Hello Servlet");
+					// 인증, 보안, 다국어 처리, 공통 기능 -  매핑 기능을 컨트롤러가 담당.
+
+					if(req.getRequestURI().equals("/Hello")&& req.getMethod().equals(HttpMethod.GET.name())){
+						String name = req.getParameter("name");
+
+						resp.setStatus(HttpStatus.OK.value());
+						resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE); // <-- 하드코딩 하지 말고 스프링 안에 정의되어 있는 상수 사용 권유
+						resp.getWriter().println(":::: Hello__ " + name );
+					}
+					else if (req.getRequestURI().equals("/user")) {
+						//
+						resp.getWriter().println(":::: /user__ ");
+					}
+					else {
+						// 404 error
+						resp.getWriter().println(":::: 404 error");
+						resp.setStatus(HttpStatus.NOT_FOUND.value());
+					}
+
 				}
-			}).addMapping("/Servlet");
+			// }).addMapping("/Servlet");
+			}).addMapping("/*");   //요청이 들어오는 모든 것을 Control할꺼야.
 		});
 		webServer.start();
 
