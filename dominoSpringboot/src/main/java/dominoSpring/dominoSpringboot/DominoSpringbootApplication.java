@@ -24,10 +24,10 @@ public class DominoSpringbootApplication {
 				@Override
 				protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 					resp.setStatus(HttpStatus.OK.value());
-					resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
+					resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE); // <-- 하드코딩 하지 말고 스프링 안에 정의되어 있는 상수 사용 권유
 					resp.getWriter().println("Hello Servlet");
 				}
-			}).addMapping("/hello");
+			}).addMapping("/Servlet");
 		});
 		webServer.start();
 
