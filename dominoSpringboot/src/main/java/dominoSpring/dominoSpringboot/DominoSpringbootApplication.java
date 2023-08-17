@@ -22,25 +22,28 @@ public class DominoSpringbootApplication {
 		TomcatServletWebServerFactory serverfactory = new TomcatServletWebServerFactory();
 		WebServer webServer = serverfactory.getWebServer(servletContext -> {
 			// servletContext.addServlet("hello", new HttpServlet() {
+			HelloController helloController = new HelloController() ;
+
 			servletContext.addServlet("frontController", new HttpServlet() {
 				@Override
 				protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-					// 인증, 보안, 다국어 처리, 공통 기능 -  매핑 기능을 컨트롤러가 담당.
-
+					// 인증, 보안, 다국어 처리, 공통 기능 -  매핑 기능을 컨트롤러가 담당. 3가지 요소 (상태 코드, 헤더, 바디)를 이용해서 웹 요청 생성
 					if(req.getRequestURI().equals("/Hello")&& req.getMethod().equals(HttpMethod.GET.name())){
 						String name = req.getParameter("name");
 
+						String ret = helloController.Hello(name) ;
+
 						resp.setStatus(HttpStatus.OK.value());
-						resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE); // <-- 하드코딩 하지 말고 스프링 안에 정의되어 있는 상수 사용 권유
-						resp.getWriter().println(":::: Hello__ " + name );
+						resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
+						resp.getWriter().println("::::DominoSpringbootApplication __ Hello__ " + name );
 					}
 					else if (req.getRequestURI().equals("/user")) {
 						//
-						resp.getWriter().println(":::: /user__ ");
+						resp.getWriter().println("::::DominoSpringbootApplication __ /user__ ");
 					}
 					else {
 						// 404 error
-						resp.getWriter().println(":::: 404 error");
+						resp.getWriter().println("::::DominoSpringbootApplication __ 404 error");
 						resp.setStatus(HttpStatus.NOT_FOUND.value());
 					}
 
