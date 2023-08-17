@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 public class HelloController {
-    @GetMapping ("/Hello")   //http://localhost:8080/Hello?name=domino
     public String Hello(String name) {
-        System.out.println("/Hello 잘 되는지 체크체크");
-            return "Hello  " + name;
+        System.out.println("/say Hello 되는지 체크체크 ");
+        SimpleHelloService SimpleHelloService = new SimpleHelloService();
+        return SimpleHelloService.sayHello(name) ;
     }
 }
 

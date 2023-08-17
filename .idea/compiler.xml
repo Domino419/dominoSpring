@@ -3,7 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
       <module name="dominoSpringboot.dominoSpringboot.main" target="11" />
-      <module name="dominoSpringboot.dominoSpringboot.test" target="11" />
+      <module name="dominoSpringboot.dominoSpringboot.test~1" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

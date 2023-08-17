@@ -1,6 +1,7 @@
 package dominoSpring.dominoSpringboot;
 
 
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.context.support.GenericApplicationContext;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@SpringBootApplication
 public class DominoSpringbootApplication {
 
 	public static void main(String[] args) {
@@ -35,7 +37,8 @@ public class DominoSpringbootApplication {
 						String ret = HelloController.Hello(name) ;
 
 						resp.setContentType(MediaType.TEXT_PLAIN_VALUE);
-						resp.getWriter().println("::::DominoSpringbootApplication __ Hello__ " + ret );
+						resp.getWriter().println("::::DominoSpringbootApplication __ Hello__ " );
+						resp.getWriter().println(ret);
 					}
 					else { // 404 error
 						resp.getWriter().println("::::DominoSpringbootApplication __ 404 error");
@@ -47,12 +50,6 @@ public class DominoSpringbootApplication {
 		webServer.start();
 
 		System.out.println("서블릿 컨테이너 떳다  !  ");
-
-
-
-
-
-
 	}
 }
 
