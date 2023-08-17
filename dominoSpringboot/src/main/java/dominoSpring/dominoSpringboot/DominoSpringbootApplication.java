@@ -4,11 +4,13 @@ package dominoSpring.dominoSpringboot;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-
+import org.springframework.context.support.GenericApplicationContext;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,38 +19,34 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class DominoSpringbootApplication {
+
 	public static void main(String[] args) {
-		System.out.println("서블릿 컨테이너 띄우기 실습 시작 ");
+		// 스프링 컨테이너를 대표하는 인터페이스  ApplicationContext 에 클래스를 직접 등록
+		GenericApplicationContext applicationContext = new GenericApplicationContext();
+		applicationContext.registerBean(HelloController.class) ;
+		applicationContext.refresh();   // <- 등록하고 나서 초기화 처리
+
 		TomcatServletWebServerFactory serverfactory = new TomcatServletWebServerFactory();
 		WebServer webServer = serverfactory.getWebServer(servletContext -> {
-			// servletContext.addServlet("hello", new HttpServlet() {
-			HelloController helloController = new HelloController() ;
 
 			servletContext.addServlet("frontController", new HttpServlet() {
 				@Override
 				protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-					// 인증, 보안, 다국어 처리, 공통 기능 -  매핑 기능을 컨트롤러가 담당. 3가지 요소 (상태 코드, 헤더, 바디)를 이용해서 웹 요청 생성
+					// 인증, 보안, 다국어 처리, 공통 기능
 					if(req.getRequestURI().equals("/Hello")&& req.getMethod().equals(HttpMethod.GET.name())){
 						String name = req.getParameter("name");
 
-						String ret = helloController.Hello(name) ;
+						HelloController HelloController  = applicationContext.getBean(HelloController.class) ;
+						String ret = HelloController.Hello(name) ;
 
-						resp.setStatus(HttpStatus.OK.value());
-						resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
-						resp.getWriter().println("::::DominoSpringbootApplication __ Hello__ " + name );
+						resp.setContentType(MediaType.TEXT_PLAIN_VALUE);
+						resp.getWriter().println("::::DominoSpringbootApplication __ Hello__ " + ret );
 					}
-					else if (req.getRequestURI().equals("/user")) {
-						//
-						resp.getWriter().println("::::DominoSpringbootApplication __ /user__ ");
-					}
-					else {
-						// 404 error
+					else { // 404 error
 						resp.getWriter().println("::::DominoSpringbootApplication __ 404 error");
 						resp.setStatus(HttpStatus.NOT_FOUND.value());
 					}
-
 				}
-			// }).addMapping("/Servlet");
 			}).addMapping("/*");   //요청이 들어오는 모든 것을 Control할꺼야.
 		});
 		webServer.start();
