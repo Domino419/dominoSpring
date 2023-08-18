@@ -34,7 +34,7 @@ public class DominoSpringbootApplication {
 			).addMapping("/*");
 		});
 		webServer.start();
-		System.out.println("서블릿 컨테이너 떳다  !  ");
+		System.out.println("서버 기동 완료!!  ");
 	}
 }
 

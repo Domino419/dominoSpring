@@ -1,17 +1,25 @@
 package dominoSpring.dominoSpringboot;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.util.Objects;
-
-
+@RequestMapping("/hello")
 public class HelloController {
     private final HelloService helloService ;
 
-    // 7 line에서 Problems 뜬 거 클릭해서 add constructor parameter
-    public HelloController(HelloService helloService) {
-        this.helloService = helloService;
+    public HelloController (HelloService helloService){
+        this.helloService = helloService ;
     }
 
+    // 7 line에서 Problems 뜬 거 클릭해서 add constructor parameter
 
+
+    @GetMapping
+    @ResponseBody
+ //   @RequestMapping(value = "/Hello", method = RequestMethod.GET) //
     public String Hello(String name) {
         System.out.println("HelloController::: say Hello 되는지 체크체크 ");
         return helloService.sayHello(Objects.requireNonNull(name));
