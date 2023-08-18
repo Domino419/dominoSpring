@@ -3,12 +3,14 @@ package dominoSpring.dominoSpringboot;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
+
 
 public class HelloController {
     public String Hello(String name) {
-        System.out.println("/say Hello 되는지 체크체크 ");
+        System.out.println("HelloController::: say Hello 되는지 체크체크 ");
         SimpleHelloService SimpleHelloService = new SimpleHelloService();
-        return SimpleHelloService.sayHello(name) ;
+        return SimpleHelloService.sayHello(Objects.requireNonNull(name) );
     }
 }
 
