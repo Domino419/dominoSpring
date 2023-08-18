@@ -1,16 +1,20 @@
 package dominoSpring.dominoSpringboot;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import java.util.Objects;
 
 
 public class HelloController {
+    private final HelloService helloService ;
+
+    // 7 line에서 Problems 뜬 거 클릭해서 add constructor parameter
+    public HelloController(HelloService helloService) {
+        this.helloService = helloService;
+    }
+
+
     public String Hello(String name) {
         System.out.println("HelloController::: say Hello 되는지 체크체크 ");
-        SimpleHelloService SimpleHelloService = new SimpleHelloService();
-        return SimpleHelloService.sayHello(Objects.requireNonNull(name) );
+        return helloService.sayHello(Objects.requireNonNull(name));
     }
 }
 

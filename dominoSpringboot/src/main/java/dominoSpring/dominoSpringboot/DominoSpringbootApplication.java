@@ -21,6 +21,7 @@ public class DominoSpringbootApplication {
 		// 스프링 컨테이너를 대표하는 인터페이스  ApplicationContext 에 클래스를 직접 등록
 		GenericApplicationContext applicationContext = new GenericApplicationContext();
 		applicationContext.registerBean(HelloController.class) ;
+		applicationContext.registerBean(SimpleHelloService.class) ;
 		applicationContext.refresh();   // <- 등록하고 나서 초기화 처리
 
 		TomcatServletWebServerFactory serverfactory = new TomcatServletWebServerFactory();
