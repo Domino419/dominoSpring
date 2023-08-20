@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
-@RequestMapping("/hello")
+// @RequestMapping("/hello")
+@RestController   // < 이 안에 들어가면 @Controller , @ResponseBody 이게 다 포함되어 있음.
 public class HelloController {
     private final HelloService helloService ;
 
@@ -14,12 +15,7 @@ public class HelloController {
         this.helloService = helloService ;
     }
 
-    // 7 line에서 Problems 뜬 거 클릭해서 add constructor parameter
-
-
-    @GetMapping
-    @ResponseBody
- //   @RequestMapping(value = "/Hello", method = RequestMethod.GET) //
+    @GetMapping("/hello")
     public String Hello(String name) {
         System.out.println("HelloController::: say Hello 되는지 체크체크 ");
         return helloService.sayHello(Objects.requireNonNull(name));
