@@ -16,18 +16,30 @@ import org.springframework.web.servlet.DispatcherServlet;
 @Configuration // 구성 정보를 가지고 있는 class라는 걸 명시
 @ComponentScan // @Component 라는 어노테이션이 붙은 걸 모두 찾아서 빈으로 등록해주는 어노테이션
 public class DominoSpringbootApplication {
+	@Bean
+	public ServletWebServerFactory servletWebServerFactory() {
+		return new TomcatServletWebServerFactory() ;
+	}
+
+	@Bean
+	public DispatcherServlet dispatcherServlet () {
+		return new DispatcherServlet() ;
+
+	}
+
 
 	public static void main(String[] args) {
-		// 스프링 컨테이너를 대표하는 인터페이스  ApplicationContext 에 클래스를 직접 등록
 		AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext() {
 			@Override
 			protected void onRefresh() {
 				super.onRefresh();
 
-				ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
+				ServletWebServerFactory serverFactory = this.getBean(ServletWebServerFactory.class) ;
+				DispatcherServlet dispatcherServlet = this.getBean(DispatcherServlet.class) ;
+				//dispatcherServlet.setApplicationContext(this);
+
 				WebServer webServer = serverFactory.getWebServer(servletContext -> {
-					servletContext.addServlet("dispatcherServlet",
-									new DispatcherServlet(this))
+					servletContext.addServlet("dispatcherServlet",dispatcherServlet)
 							.addMapping("/*");
 				});
 				webServer.start();
