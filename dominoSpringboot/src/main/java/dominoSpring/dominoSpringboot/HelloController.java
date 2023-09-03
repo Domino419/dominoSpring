@@ -1,13 +1,10 @@
 package dominoSpring.dominoSpringboot;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.Objects;
-// @RequestMapping("/hello")
-@RestController   // < 이 안에 들어가면 @Controller , @ResponseBody 이게 다 포함되어 있음.
+
+@RestController
 public class HelloController {
     private final HelloService helloService ;
 
