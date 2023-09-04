@@ -1,5 +1,6 @@
 package dominoSpring.dominoSpringboot;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
@@ -25,10 +26,31 @@ public class DominoSpringbootApplication {
 
 
 	public static void main(String[] args) {
-		SpringApplication.run(DominoSpringbootApplication.class, args);
+		run(DominoSpringbootApplication.class, args);
 		System.out.println("서버 기동 완료!!  ");
 	}
 
+	private static void run(Class<?> applicationClass, String... args) {
+		AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext() {
+			@Override
+			protected void onRefresh() {
+				super.onRefresh();
+
+				ServletWebServerFactory serverFactory = this.getBean(ServletWebServerFactory.class) ;
+				DispatcherServlet dispatcherServlet = this.getBean(DispatcherServlet.class) ;
+				//dispatcherServlet.setApplicationContext(this);
+
+				WebServer webServer = serverFactory.getWebServer(servletContext -> {
+					servletContext.addServlet("dispatcherServlet",dispatcherServlet)
+							.addMapping("/*");
+				});
+				webServer.start();
+
+			}
+		} ;
+		applicationContext.register(applicationClass);
+		applicationContext.refresh();  //<< 스프링 컨테이너의 초기화 작업
+	}
 }
 
 
